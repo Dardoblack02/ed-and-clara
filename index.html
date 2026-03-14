@@ -331,30 +331,20 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RJq_ELRutdb_kReIH
     let savedMessages = [];
 
 // --- FETCH DATA FROM GOOGLE SHEETS ---
-async function loadInitialData() {
-    try {
-        // Adding {mode: 'cors'} is not enough; Google requires a redirect follow
-        const response = await fetch(SCRIPT_URL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8',
-            },
-            redirect: 'follow' 
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-
-        const data = await response.json();
-        takenGifts = data.takenGifts || [];
-        savedMessages = data.savedMessages || [];
-    } catch (error) {
-        console.error("Database connection failed:", error);
-    } finally {
-        // This ensures your hardcoded registry shows up even if the fetch fails
-        initRegistry();
-        displayMessages();
+    async function loadInitialData() {
+        try {
+            // A simple GET request without custom headers avoids the CORS preflight trap
+            const response = await fetch(SCRIPT_URL); 
+            const data = await response.json();
+            takenGifts = data.takenGifts || [];
+            savedMessages = data.savedMessages || [];
+        } catch (error) {
+            console.error("Database connection failed:", error);
+        } finally {
+            initRegistry();
+            displayMessages();
+        }
     }
-}
 
     // --- FUNCTION: DISPLAY REGISTRY ---
     function initRegistry() {
@@ -423,18 +413,30 @@ async function loadInitialData() {
             msg: msg
         };
 
-        try {
+try {
+            // The magic bullet: 'no-cors' sends the data successfully without 
+            // the browser blocking it while waiting for a validated response.
             await fetch(SCRIPT_URL, {
                 method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
                 body: JSON.stringify(payload)
             });
 
             alert("RSVP Sent! Thank you " + firstName + ".");
-            this.reset();
-            await loadInitialData(); // Reload fresh data from sheet
+            document.getElementById('rsvpForm').reset();
+            
+            // Give the Google Sheet a brief moment to save the row 
+            // before we pull the fresh list of messages and gifts.
+            setTimeout(() => {
+                loadInitialData(); 
+            }, 1500);
+
         } catch (error) {
             alert("There was an error sending your RSVP. Please try again.");
-            console.error(error);
+            console.error("Submission error:", error);
         } finally {
             submitBtn.innerText = "Submit RSVP";
             submitBtn.disabled = false;
