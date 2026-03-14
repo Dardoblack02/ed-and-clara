@@ -313,7 +313,7 @@
     </footer>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSZIVrqP5uQ93ZBVAPtVSaI142jzwleK0iT8oQvUGmFFzRqwxC9bDciken1FOpTC0V/exec'; 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RJq_ELRutdb_kReIHS_MsIvwB2k33toDS2NByR7m1Zfk2Yx4KYyk2z7aLAu20u5z/exec'; 
 
     // --- GIFT DATA ---
     const giftRegistry = [
@@ -331,24 +331,30 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSZIVrqP5uQ93ZBVAPt
     let savedMessages = [];
 
 // --- FETCH DATA FROM GOOGLE SHEETS ---
-    async function loadInitialData() {
-        try {
-            const response = await fetch(SCRIPT_URL, { redirect: 'follow' });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            takenGifts = data.takenGifts || [];
-            savedMessages = data.savedMessages || [];
-        } catch (error) {
-            console.error("Database connection failed. Loading default UI. Error:", error);
-        } finally {
-            // By moving these to a 'finally' block, the UI renders 
-            // even if the fetch fails due to network or CORS issues.
-            initRegistry();
-            displayMessages();
-        }
+async function loadInitialData() {
+    try {
+        // Adding {mode: 'cors'} is not enough; Google requires a redirect follow
+        const response = await fetch(SCRIPT_URL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            redirect: 'follow' 
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const data = await response.json();
+        takenGifts = data.takenGifts || [];
+        savedMessages = data.savedMessages || [];
+    } catch (error) {
+        console.error("Database connection failed:", error);
+    } finally {
+        // This ensures your hardcoded registry shows up even if the fetch fails
+        initRegistry();
+        displayMessages();
     }
+}
 
     // --- FUNCTION: DISPLAY REGISTRY ---
     function initRegistry() {
