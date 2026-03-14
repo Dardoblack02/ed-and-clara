@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edward & Clara | June 20, 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --burgundy: #800020;
+            --gold: #C5A059;
+            --cream: #FFFDF9;
+            --white: #ffffff;
+            --gray: #f4f4f4;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--cream); 
+            scroll-behavior: smooth; 
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070') no-repeat center center/cover;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .hero p.subtitle { text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem; margin-bottom: 0; }
+        .hero h1 { font-size: clamp(2.2rem, 12vw, 4.5rem); margin: 10px 0; line-height: 1.1; }
+        
+        .clickable-date {
+            color: var(--gold);
+            font-size: 1.3rem;
+            text-decoration: none;
+            border: 2px solid var(--gold);
+            padding: 12px 25px;
+            margin: 25px 0;
+            display: inline-block;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.2);
+        }
+
+	.clickable-date:hover {
+            background-color: var(--gold);
+            color: var(--burgundy);
+            transform: scale(1.05);
+        }
+
+
+        /* COUNTDOWN */
+        #countdown { display: flex; gap: 8px; margin-top: 20px; justify-content: center; width: 100%; }
+        .count-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            padding: 10px;
+            flex: 1;
+            max-width: 75px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .count-number { font-size: 1.4rem; font-weight: bold; color: var(--gold); display: block; font-variant-numeric: tabular-nums; }
+        .count-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* CELEBRATION SECTION */
+        .details-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .details-section h2 { color: var(--burgundy); font-size: 2.5rem; margin-bottom: 10px; }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr;
+            gap: 20px; 
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        }
+
+        .info-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            min-width: 0; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+        /* TABLET & DESKTOP: Switch to 3 columns */
+        @media (min-width: 768px) {
+        .grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            }
+        }
+
+
+        .info-card h3 { color: var(--burgundy); font-size: 1.4rem; margin-bottom: 20px; border-bottom: 1px solid var(--cream); padding-bottom: 10px; }
+        .info-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+        /* WHERE SECTION */
+        .location-box { margin-bottom: 20px; }
+        .loc-title { font-weight: 600; color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .maps-link { color: var(--burgundy); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--gold); font-size: 0.9rem; transition: 0.3s; }
+        .maps-link:hover { color: var(--gold); }
+
+        /* DRESS CODE SLIDER */
+        .dress-slider {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 15px 5px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+
+        .dress-img {
+            flex: 0 0 140px; /* Perfect width for mobile "peeking" */
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            scroll-snap-align: start;
+            background-color: #f4f4f4;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* REGISTRY SECTION */
+        .registry-section { padding: 80px 20px; text-align: center; background: white; }
+        .registry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        .gift-item {
+            padding: 20px 10px;
+            background: var(--cream);
+            font-size: 0.85rem;
+            color: var(--burgundy);
+            font-weight: 600;
+        }
+        .gift-item.taken {
+            text-decoration: line-through;
+            opacity: 0.5;
+            background: #eee;
+            color: #888;
+        }
+
+        /* RSVP SECTION */
+        .rsvp-section { background-color: var(--burgundy); color: white; padding: 80px 20px; text-align: center; }
+        .rsvp-container { max-width: 550px; margin: 0 auto; }
+        form { display: flex; flex-direction: column; gap: 15px; text-align: left; margin-top: 30px; }
+        .form-row { display: flex; gap: 10px; }
+        input, select, textarea { 
+            padding: 16px; font-size: 16px; border-radius: 8px; border: none; width: 100%; box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif;
+        }
+        label { font-size: 0.8rem; color: var(--gold); font-weight: 600; margin-bottom: -10px; display: block; }
+
+        .btn-submit { 
+            background: var(--gold); color: white; padding: 18px; font-weight: bold; border: none; 
+            cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        /* MESSAGE BOARD */
+        .message-board { padding: 80px 20px; text-align: center; }
+        #message-list { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 30px; }
+        .message-card { 
+            background: white; padding: 25px; width: 100%; max-width: 450px; 
+            border-left: 5px solid var(--gold); text-align: left; box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        footer { padding: 60px 20px; background: #111; color: var(--gold); text-align: center; }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.8rem; }
+            .form-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <p class="subtitle">SAVE THE DATE</p>
+        <h1>Edward & Clara</h1>
+        <p>JUNE 20, 2026 | Caloocan City</p>
+        <a href="#celebration" class="clickable-date">VIEW DETAILS</a>
+        <div id="countdown">
+            <div class="count-item"><span class="count-number" id="days">00</span><span class="count-label">Days</span></div>
+            <div class="count-item"><span class="count-number" id="hours">00</span><span class="count-label">Hours</span></div>
+            <div class="count-item"><span class="count-number" id="minutes">00</span><span class="count-label">Mins</span></div>
+            <div class="count-item"><span class="count-number" id="seconds">00</span><span class="count-label">Secs</span></div>
+        </div>
+    </section>
+    <!-- CELEBRATION SECTION -->
+    <section class="details-section" id="celebration">
+        <h2>The Celebration</h2>
+        <p style="font-style: italic; color: #666; max-width: 600px; margin: 0 auto;">We can't wait to share our special day with you. Here are the details for our wedding celebration.</p>
+        
+        <div class="grid">
+            <!-- WHEN -->
+            <div class="info-card">
+                <h3>When</h3>
+                <p><b>Ceremony:</b> 9:00 AM</p>
+                <p><b>Reception:</b> 11:00 AM</p>
+            </div>
+
+            <!-- WHERE -->
+            <div class="info-card">
+                <h3>Where</h3>
+                <div class="location-box">
+                    <div class="loc-title">Ceremony</div>
+                    <p>Shrine of Our Lady of Grace</p>
+                    <a href="https://maps.app.goo.gl/5CCcBkTjDdrai8D79" target="_blank" class="maps-link">Open in Maps</a>
+                </div>
+                <div class="location-box" style="margin-bottom:0;">
+                    <div class="loc-title">Reception</div>
+                    <p>Chef Patrick's Kitchen</p>
+                    <a href="https://maps.app.goo.gl/ffemshFVf4E9JXGy7" target="_blank" class="maps-link">Open in Maps</a>
+                </div>
+            </div>
+
+            <!-- DRESS CODE -->
+            <div class="info-card">
+                <h3>Dress Code</h3>
+                <p>Burgundy Wine with Gold accents</p>
+                <p style="font-size: 0.8rem; color: var(--gold);">Swipe for style inspiration &rarr;</p>
+                <div class="dress-slider">
+                    <!-- Images from your v5 update -->
+                    <div class="dress-img" style="background-image: url('https://images.unsplash.com/photo-1767884044863-921f06ccf54e?q=80&w=300');"></div>
+                    <div class="dress-img" style="background-image: url('https://i.pinimg.com/736x/e9/43/71/e94371b3139ce72895a8b78e19c878ef.jpg');"></div>
+                    <div class="dress-img" style="background-image: url('https://images.unsplash.com/photo-1746366618815-beaf21b2b109?q=80&w=300');"></div>
+                    <div class="dress-img" style="background-image: url('https://images.unsplash.com/photo-1716946861089-199f9635351d?q=80&w=300');"></div>
+                    <div class="dress-img" style="background-image: url('https://i.pinimg.com/736x/c6/cc/40/c6cc40064cb4d3b12bb498c1c3fb2955.jpg');"></div>
+                    <div class="dress-img" style="background-image: url('https://content.woolovers.com/img/747x856/fbcec-219181_j86m_deepmaroon_m_8-v2.jpg');"></div>
+                    <div class="dress-img" style="background-image: url('https://presleycouture.com/cdn/shop/products/LLP_9554_1200x1200.jpg?v=1691787191');"></div>
+                    <div class="dress-img" style="background-image: url('https://img01.ztat.net/article/spp-media-p1/1b65fca859bc4610954440433213c8b4/d73fdfea719a44fd8de16287937328fe.jpg?imwidth=400');"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WEDDING REGISTRY SECTION -->
+    <section class="registry-section">
+        <h2 style="color: var(--burgundy);">Wedding Registry</h2>
+        <p style="max-width: 600px; margin: 0 auto; font-style: italic;">Your presence is the greatest gift, but if you wish to honor us with a gift, we have a wishlist below:</p>
+        
+        <div class="registry-grid" id="registryDisplay">
+
+            <!-- Gifts will be generated here -->
+        </div>
+<p style="max-width: 600px; margin: 0 auto; font-style: italic;">Scroll down to RSVP.</p>
+    </section>
+
+    <section class="rsvp-section">
+        <div class="rsvp-container">
+            <h2>Will You Attend?</h2>
+	    <p>Please RSVP by <b>May 20, 2026</b></p>
+            <form id="rsvpForm">
+                <div class="form-row">
+                    <input type="text" id="firstName" placeholder="First Name" required>
+                    <input type="text" id="lastName" placeholder="Last Name" required>
+                </div>
+                
+                <label>Will you be attending?</label>
+                <select id="attendance" required>
+                    <option value="be attending">Joyfully Attend</option>
+                    <option value="not be attending">Regretfully Decline</option>
+                </select>
+
+                <label>Wedding Gift (Optional)</label>
+                <select id="giftSelection">
+                    <option value="No gift selected">-- Select a gift from our registry --</option>
+                    <!-- Options generated via JS -->
+                </select>
+
+                <textarea id="guestMessage" rows="4" placeholder="Short sweet message for the groom and bride..." required></textarea>
+                <button type="submit" class="btn-submit">Submit RSVP</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="message-board">
+        <h2>Messages to the Groom and Bride</h2>
+        <div id="message-list"></div>
+    </section>
+
+    <footer>
+        <h2>#EdAndClaraEverAfter</h2>
+	<p>With Love, Edward & Clara</p>
+    </footer>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSZIVrqP5uQ93ZBVAPtVSaI142jzwleK0iT8oQvUGmFFzRqwxC9bDciken1FOpTC0V/exec'; 
+
+    // --- GIFT DATA ---
+    const giftRegistry = [
+        { id: 1, name: "Microwave Oven", repeatable: false },
+        { id: 2, name: "Robot Vacuum", repeatable: false },
+        { id: 3, name: "Coffee/Espresso Machine", repeatable: false },
+        { id: 4, name: "Air Purifier", repeatable: false },
+        { id: 5, name: "Blender", repeatable: false },
+        { id: 6, name: "Cooking Ware Set", repeatable: true },
+        { id: 7, name: "Cash Gift", repeatable: true },
+        { id: 8, name: "SURPRISE US!", repeatable: true }
+    ];
+
+    let takenGifts = [];
+    let savedMessages = [];
+
+    // --- FETCH DATA FROM GOOGLE SHEETS ---
+    async function loadInitialData() {
+        try {
+            const response = await fetch(SCRIPT_URL);
+            const data = await response.json();
+            takenGifts = data.takenGifts || [];
+            savedMessages = data.savedMessages || [];
+            initRegistry();
+            displayMessages();
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    }
+
+    // --- FUNCTION: DISPLAY REGISTRY ---
+    function initRegistry() {
+        const display = document.getElementById('registryDisplay');
+        const select = document.getElementById('giftSelection');
+        
+        display.innerHTML = '';
+        select.innerHTML = '<option value="No gift selected">-- Select a gift from our registry --</option>';
+
+        giftRegistry.forEach(gift => {
+            const isTaken = !gift.repeatable && takenGifts.includes(gift.id);
+            
+            const item = document.createElement('div');
+            item.className = `gift-item ${isTaken ? 'taken' : ''}`;
+            item.innerText = gift.name + (isTaken ? ' (Taken)' : '');
+            display.appendChild(item);
+
+            const opt = document.createElement('option');
+            opt.value = gift.name;
+            opt.dataset.id = gift.id;
+            opt.innerText = gift.name + (isTaken ? ' (Already Promised)' : '');
+            if (isTaken) opt.disabled = true;
+            select.appendChild(opt);
+        });
+    }
+
+    // --- FUNCTION: DISPLAY MESSAGES ---
+    function displayMessages() {
+        const list = document.getElementById('message-list');
+        list.innerHTML = ''; 
+        
+        savedMessages.forEach(data => {
+            const card = document.createElement('div');
+            card.className = 'message-card';
+            const giftText = data.gift !== "No gift selected" ? ` <br><small>Gift: ${data.gift}</small>` : "";
+            card.innerHTML = `<p>"${data.msg}"</p> 
+                              <span>— ${data.name} will ${data.status}${giftText}</span>`;
+            list.appendChild(card); // Appending because Apps Script already reversed it
+        });
+    }
+
+    // --- RSVP FORM SUBMISSION ---
+    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.querySelector('.btn-submit');
+        submitBtn.innerText = "Sending...";
+        submitBtn.disabled = true;
+
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const giftName = document.getElementById('giftSelection').value;
+        const giftId = document.getElementById('giftSelection').selectedOptions[0].dataset.id;
+        const status = document.getElementById('attendance').value;
+        const msg = document.getElementById('guestMessage').value;
+
+        const selectedGiftObj = giftRegistry.find(g => g.id == giftId);
+        const isRepeatable = selectedGiftObj ? selectedGiftObj.repeatable : true;
+
+        const payload = {
+            name: firstName + " " + lastName,
+            giftName: giftName,
+            giftId: giftId ? parseInt(giftId) : null,
+            repeatable: isRepeatable,
+            status: status,
+            msg: msg
+        };
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+
+            alert("RSVP Sent! Thank you " + firstName + ".");
+            this.reset();
+            await loadInitialData(); // Reload fresh data from sheet
+        } catch (error) {
+            alert("There was an error sending your RSVP. Please try again.");
+            console.error(error);
+        } finally {
+            submitBtn.innerText = "Submit RSVP";
+            submitBtn.disabled = false;
+        }
+    });
+
+    // --- COUNTDOWN ---
+    const target = new Date("June 20, 2026 09:00:00").getTime();
+    setInterval(() => {
+        const now = new Date().getTime();
+        const dist = target - now;
+        if (dist < 0) return;
+        document.getElementById("days").innerText = Math.floor(dist / 86400000).toString().padStart(2, '0');
+        document.getElementById("hours").innerText = Math.floor((dist % 86400000) / 3600000).toString().padStart(2, '0');
+        document.getElementById("minutes").innerText = Math.floor((dist % 3600000) / 60000).toString().padStart(2, '0');
+        document.getElementById("seconds").innerText = Math.floor((dist % 60000) / 1000).toString().padStart(2, '0');
+    }, 1000);
+
+    // Initial Load
+    loadInitialData();
+</script>
+</body>
+</html>
