@@ -330,17 +330,23 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSZIVrqP5uQ93ZBVAPt
     let takenGifts = [];
     let savedMessages = [];
 
-    // --- FETCH DATA FROM GOOGLE SHEETS ---
+// --- FETCH DATA FROM GOOGLE SHEETS ---
     async function loadInitialData() {
         try {
-            const response = await fetch(SCRIPT_URL);
+            const response = await fetch(SCRIPT_URL, { redirect: 'follow' });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const data = await response.json();
             takenGifts = data.takenGifts || [];
             savedMessages = data.savedMessages || [];
+        } catch (error) {
+            console.error("Database connection failed. Loading default UI. Error:", error);
+        } finally {
+            // By moving these to a 'finally' block, the UI renders 
+            // even if the fetch fails due to network or CORS issues.
             initRegistry();
             displayMessages();
-        } catch (error) {
-            console.error("Error loading data:", error);
         }
     }
 
