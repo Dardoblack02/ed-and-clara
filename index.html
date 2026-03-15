@@ -41,6 +41,51 @@
 
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
+        /* FLOATING NAVIGATION (GLASSMORPHISM) */
+        .floating-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: rgba(255, 253, 249, 0.3); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(12px); 
+            border: 1px solid rgba(197, 160, 89, 0.3); 
+            padding: 0px;
+            border-radius: 40px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 95vw;
+            overflow-x: auto; 
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+
+        .floating-nav::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .floating-nav a {
+            text-decoration: none;
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 18px;
+            border-radius: 40px;       /* same curve as navbar */
+            white-space: nowrap;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .floating-nav a:hover {
+                background-color: var(--gold);
+            color: var(--burgundy);
+            transform: scale(1.05);
+        }
+
         /* HERO SECTION */
         .hero {
             min-height: 100vh;
@@ -71,7 +116,7 @@
             background: rgba(0,0,0,0.2);
         }
 
-	.clickable-date:hover {
+	    .clickable-date:hover {
             background-color: var(--gold);
             color: var(--burgundy);
             transform: scale(1.05);
@@ -93,9 +138,56 @@
         .count-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
 
         /* CELEBRATION SECTION */
-        .details-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .details-section { 
+            padding: 80px 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            text-align: center; 
+            position: relative; /* Added to anchor absolute background */
+        }
+        
+        /* Ensure existing content stays readable above the background */
+        .details-section > *:not(.celeb-bg-container) {
+            position: relative;
+            z-index: 2;
+        }
+
         .details-section h2 { color: var(--burgundy); font-size: 2.5rem; margin-bottom: 10px; }
         
+        /* NEW: BACKGROUND SLIDESHOW */
+        .celeb-bg-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 100vw;
+            height: 100%;
+            transform: translateX(-50%);
+            z-index: 0; 
+            overflow: hidden;
+            pointer-events: none; /* Prevents background from blocking clicks */
+        }
+        .celeb-slider-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.5s ease-in-out; /* 0.5 second smooth swipe */
+        }
+        .celeb-slide {
+            flex: 0 0 100vw;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        .celeb-slider-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 253, 249, 0.6); /* Cream translucent matte glass layer */
+            z-index: 1;
+        }
+
         .grid { 
             display: grid; 
             grid-template-columns: 1fr;
@@ -149,7 +241,7 @@
         
 
         .dress-img {
-            flex: 0 0 140px; /* Perfect width for mobile "peeking" */
+            flex: 0 0 140px; 
             height: 200px;
             background-size: cover;
             background-position: center;
@@ -158,6 +250,32 @@
             background-color: #f4f4f4;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        /* ENTOURAGE SECTION */
+        .entourage-section { padding: 80px 20px; text-align: center; background-color: var(--white); }
+        .entourage-section h2 { color: var(--burgundy); font-size: 2.5rem; margin-bottom: 40px; }
+        .entourage-container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 35px; }
+        .entourage-group { margin-bottom: 5px; }
+        .entourage-group h3, .entourage-block h3 { color: var(--gold); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-weight: 600; font-family: 'Montserrat', sans-serif;}
+        .entourage-group p, .entourage-block p { margin: 5px 0; font-size: 1.2rem; color: #333; font-family: 'Playfair Display', serif; }
+        
+        .secondary-sponsor-role { font-family: 'Montserrat', sans-serif !important; font-size: 0.8rem !important; font-weight: 600; color: #666 !important; text-transform: uppercase; letter-spacing: 1px; margin-top: 20px !important; margin-bottom: 5px !important;}
+        
+        .entourage-grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .entourage-grid-3 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        
+        @media (min-width: 768px) {
+            .entourage-grid-2 { grid-template-columns: 1fr 1fr; gap: 40px; }
+            .entourage-grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+        }
+        
+        .entourage-sponsors { display: flex; flex-direction: column; gap: 20px; margin-top: 15px; }
+        @media (min-width: 768px) {
+            .entourage-sponsors { flex-direction: row; justify-content: space-around; }
+        }
+        
+        .sponsors-col h4 { color: var(--burgundy); font-size: 1.3rem; margin-bottom: 15px; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--gold); padding-bottom: 5px; display: inline-block;}
+        .sponsors-col p { margin: 10px 0; font-family: 'Playfair Display', sans-serif; font-size: 1.3rem; }
 
         /* REGISTRY SECTION */
         .registry-section { padding: 80px 20px; text-align: center; background: white; }
@@ -200,11 +318,76 @@
 
         /* MESSAGE BOARD */
         .message-board { padding: 80px 20px; text-align: center; }
-        #message-list { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 30px; }
+        
+        /* NEW ATTENDANCE COUNTER STYLE */
+        .attendance-counter {
+            color: var(--burgundy);
+            font-style: italic;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: -15px;
+            margin-bottom: 25px;
+        }
+
+        #message-list { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 10px; }
         .message-card { 
-            background: white; padding: 25px; width: 100%; max-width: 450px; 
+            background: white; padding: 10px; width: 100%; max-width: 450px; 
             border-left: 5px solid var(--gold); text-align: left; box-sizing: border-box;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* FAQ SECTION */
+        .faq-section { padding: 80px 20px; background-color: var(--gray); text-align: center; }
+        .faq-container { max-width: 800px; margin: 0 auto; text-align: left; }
+        .faq-section h2 { color: var(--burgundy); font-size: 2.5rem; margin-bottom: 30px; }
+        
+        .faq-item {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--burgundy);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            transition: background 0.3s ease;
+        }
+        .faq-question:hover {
+            background: var(--cream);
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--gold);
+            transition: transform 0.3s ease;
+        }
+        .faq-question.active::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            background: white;
+        }
+        .faq-answer-content {
+            padding: 0 20px 20px 20px;
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         footer { padding: 60px 20px; background: #111; color: var(--gold); text-align: center; }
@@ -212,12 +395,37 @@
         @media (max-width: 480px) {
             .hero h1 { font-size: 2.8rem; }
             .form-row { flex-direction: column; }
+            
+            /* UPDATED: Fixes the mobile navigation bar position and horizontal overflow */
+            .floating-nav {
+                top: 15px;                 /* Keep it fixed at the top */
+                bottom: auto;              /* Prevents jumping to the bottom */
+                gap: 5px;                  /* Tighter gap to fit the mobile screen */
+                padding: 6px 10px;         /* Reduced padding for smaller screens */
+                width: 90vw;               /* Keeps it within viewport bounds */
+                box-sizing: border-box;    /* Prevents horizontal overflow */
+                justify-content: flex-start; /* Allows smooth swipe if the screen is super narrow */
+            }
+            .floating-nav a {
+                font-size: 0.65rem;        /* Smaller font to fit all options */
+                padding: 5px 8px;          /* Minimal padding */
+            }
         }
     </style>
 </head>
 <body>
 
-    <section class="hero">
+    <nav class="floating-nav">
+        <a href="#home">Save The Date</a>
+        <a href="#celebration">Celebration</a>
+        <!-- NEW ENTOURAGE LINK -->
+        <a href="#entourage">Entourage</a>
+        <a href="#registry">Registry</a>
+        <a href="#messages">Messages</a>
+        <a href="#faqs">FAQ</a>
+    </nav>
+
+    <section class="hero" id="home">
         <p class="subtitle">SAVE THE DATE</p>
         <h1>Edward & Clara</h1>
         <p>JUNE 20, 2026 | Caloocan City</p>
@@ -229,8 +437,23 @@
             <div class="count-item"><span class="count-number" id="seconds">00</span><span class="count-label">Secs</span></div>
         </div>
     </section>
+    
     <!-- CELEBRATION SECTION -->
     <section class="details-section" id="celebration">
+        
+        <!-- NEW BACKGROUND SLIDESHOW LAYER -->
+        <div class="celeb-bg-container">
+            <div class="celeb-slider-track" id="celebSliderTrack">
+                <!-- Add as many slides here as you wish by duplicating the line below -->
+                <div class="celeb-slide" style="background-image: url('https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+                <div class="celeb-slide" style="background-image: url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+                <div class="celeb-slide" style="background-image: url('https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+                <div class="celeb-slide" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+                <div class="celeb-slide" style="background-image: url('https://ak-d.tripcdn.com/images/1i60x22348kv2t91s1421_W_640_0_R5_Q80.jpg?proc=source/trip');"></div>
+            </div>
+            <div class="celeb-slider-overlay"></div>
+        </div>
+
         <h2>The Celebration</h2>
         <p style="font-style: italic; color: #666; max-width: 600px; margin: 0 auto;">We can't wait to share our special day with you. Here are the details for our wedding celebration.</p>
         
@@ -238,8 +461,8 @@
             <!-- WHEN -->
             <div class="info-card">
                 <h3>When</h3>
-                <p><b>Ceremony:</b> 9:00 AM</p>
-                <p><b>Reception:</b> 11:00 AM</p>
+                <p><b>Ceremony:</b>June 20, 2026 9:00 AM</p><br><br>
+                <p><b>Reception:</b>June 20, 2026 11:00 AM</p>
             </div>
 
             <!-- WHERE -->
@@ -249,7 +472,7 @@
                     <div class="loc-title">Ceremony</div>
                     <p>Shrine of Our Lady of Grace</p>
                     <a href="https://maps.app.goo.gl/5CCcBkTjDdrai8D79" target="_blank" class="maps-link">Open in Maps</a>
-                </div>
+                </div><br><br>
                 <div class="location-box" style="margin-bottom:0;">
                     <div class="loc-title">Reception</div>
                     <p>Chef Patrick's Kitchen</p>
@@ -277,9 +500,113 @@
         </div>
     </section>
 
+    <!-- NEW ENTOURAGE SECTION -->
+    <section class="entourage-section" id="entourage">
+        <h2>The Entourage</h2>
+        <div class="entourage-container">
+            
+            <div class="entourage-group">
+                <h3>The Bride & Groom</h3>
+                <p>Clara Mai M. Alvarez & Edward D. Cabalquinto</p>
+            </div>
+            
+            <div class="entourage-grid-2">
+                <div class="entourage-block">
+                    <h3>Parents of the Bride</h3>
+                    <p>Francisco Alvarez<br>Laura Alvarez</p>
+                </div>
+                <div class="entourage-block">
+                    <h3>Parents of the Groom</h3>
+                    <p>Rose Lynette Cabalquinto</p>
+                    <h3 style="margin-top: 15px;">Grandfather of the Groom</h3>
+                    <p>Cosmero Del Mundo</p>
+                </div>
+            </div>
+
+            <div class="entourage-grid-2" style="margin-top: 20px;">
+                <div class="entourage-block">
+                    <h3>Best Man</h3>
+                    <p>James Ofiangga</p>
+                </div>
+                <div class="entourage-block">
+                    <h3>Maid of Honor</h3>
+                    <p>Abigail Goyal</p>
+                </div>
+            </div>
+
+            <div class="entourage-grid-2" style="margin-top: 20px;">
+                <div class="entourage-block">
+                    <h3>Groomsmen</h3>
+                    <p>Marcus Kobe Arriola<br>Elijah Magno</p>
+                </div>
+                <div class="entourage-block">
+                    <h3>Bridesmaids</h3>
+                    <p>Bea Mae Glino<br>Kimberly Santos Flores</p>
+                </div>
+            </div>
+		<div class="entourage-group" style="margin-top: 30px;">
+                <h3>Principal Sponsors</h3>
+                <div class="entourage-sponsors">
+                    <div class="sponsors-col">
+                        <h4>Ninongs</h4>
+                        <p>Ronald Reyes</p>
+                        <p>Arnold Marcos</p>
+                        <p>Nilo Burnea</p>
+                        <p>Ronnel Abrera</p>
+                        <p>Dexter Solon</p>
+                        <p>Rex Aldo Manzanillo</p>
+                    </div>
+                    <div class="sponsors-col">
+                        <h4>Ninangs</h4>
+                        <p>Flerida Batang</p>
+                        <p>Margie Marcos</p>
+                        <p>Lily Burnea</p>
+                        <p>Candy Liaban</p>
+                        <p>Daisy Arriola</p>
+                        <p>Lovely Manzanillo</p>
+                    </div>
+            
+                </div>
+            <div class="entourage-group" style="margin-top: 20px;">
+                <h3>Secondary Sponsors</h3>
+                <p class="secondary-sponsor-role">To Light Our Path (Candle Sponsors)</p>
+                <p>Eduardo Balmaceda & Eloisa Reign Mellendrez</p>
+                
+                <p class="secondary-sponsor-role">To Clothe Us As One (Veil Sponsors)</p>
+                <p>Santie Gatchalian & Lei Xjiemiz Del Mundo Cabalquinto</p>
+                
+                <p class="secondary-sponsor-role">To Bind Us Together (Cord Sponsors)</p>
+                <p>Rainier Joseph Sanchez or John Gabrielle Ofiangga<br>& Xandra Jane Dating</p>
+            </div>
+
+            <div class="entourage-grid-3" style="margin-top: 20px;">
+                <div class="entourage-block">
+                    <h3>Ring Bearer</h3>
+                    <p>Jericho Alvarez</p>
+                </div>
+                <div class="entourage-block">
+                    <h3>Coin Bearer</h3>
+                    <p>Karl Matthew Crespo</p>
+                </div>
+                <div class="entourage-block">
+                    <h3>Bible Bearer</h3>
+                    <p>Joeseph Batang</p>
+                </div>
+            </div>
+
+            <div class="entourage-group" style="margin-top: 20px;">
+                <h3>Flower Girls</h3>
+                <p>Krystal Maiden Crespo<br>Isaiah Laurelle Mellendrez<br>Kissjane Orola</p>
+            </div>
+
+            </div>
+
+        </div>
+    </section>
+
     <!-- WEDDING REGISTRY SECTION -->
-    <section class="registry-section">
-        <h2 style="color: var(--burgundy);">Wedding Registry</h2>
+    <section class="registry-section" id="registry">
+        <h1 style="color: var(--burgundy);">Wedding Registry</h1>
         <p style="max-width: 600px; margin: 0 auto; font-style: italic;">Your presence is the greatest gift, but if you wish to honor us with a gift, we have a wishlist below:</p>
         
         <div class="registry-grid" id="registryDisplay">
@@ -317,13 +644,107 @@
         </div>
     </section>
 
-    <section class="message-board">
+    <section class="message-board" id="messages">
         <h2>Messages to the Groom and Bride</h2>
+        <!-- NEW ATTENDANCE COUNTER -->
+        <p class="attendance-counter" id="attendanceCounter">0 out of 130 will attend our wedding!</p>
         <div id="message-list"></div>
     </section>
 
+    <!-- NEW FAQ SECTION -->
+    <section class="faq-section" id="faqs">
+        <h2>FAQ's</h2>
+        <div class="faq-container">
+            
+            <div class="faq-item">
+                <button class="faq-question">What time should I arrive?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        The ceremony will begin promptly at 9:00 am. We recommend arriving 20–30 minutes early to find your seat and enjoy the pre-ceremony music.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">Is there parking available at the venue?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes, there is free parking available on-site.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What is the RSVP deadline?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Please let us know if you can make it by May 20, 2026. You can RSVP via our website.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What is the dress code?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We would love to see our family and friends get dressed up! The dress code is Semi-Formal. We suggest Suit/Barong for men and Floor-length/Cocktail dresses for women.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">Are there specific colors I should avoid?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We kindly ask that you avoid wearing shades of ivory. We’d love for you to complement our theme colors, which include burgundy and white.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">Can I bring a plus one?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Due to limited seating at our venue, we can only accommodate those specifically listed on your invitation.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">Are children invited?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We certainly love your kids, but due to necessity rather than choice, we regretfully cannot accommodate them at the venue. The only kids attending are those who are part of the entourage and those requested. We hope you understand and enjoy the day!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What do I do if I'm late to the ceremony?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        If you are late to the ceremony, please do not walk down the aisle and try to find a seat. While we want all of our friends and family there, we would appreciate if you would ask assistance from our coordinator or wait to join us until the reception. We thank you for understanding.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">Can I take photos or videos?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We would love for you to help us capture the joy of our day! However, we have a professional photography and videography team working hard to document every moment. We kindly ask that you:<br><br>
+                        <strong>• Be Mindful of the Pros:</strong> Please ensure your cameras or phones do not obstruct the view or equipment of our official media team.<br><br>
+                        <strong>• Clear the Path:</strong> To keep the ceremony flowing beautifully, please refrain from stepping into the aisle or blocking the path of the bride and the entourage.<br><br>
+                        We can’t wait to see the memories you capture from your seat!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <footer>
-        <h2>#EdAndClaraEverAfter</h2>
+        <h2>#MaiOneAndOnlyEdward</h2>
 	<p>With Love, Edward & Clara</p>
     </footer>
 
@@ -332,7 +753,7 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwatQQWXjV74tz0UH8-TR59840ybdiawnkSFCzcztljqBOZVq-s2Q8x-UC8qH9fobJF/exec'; 
 
     // --- GIFT DATA ---
-    const giftRegistry = [
+    const giftRegistry =[
         { id: 1, name: "Microwave Oven", repeatable: false },
         { id: 2, name: "Robot Vacuum", repeatable: false },
         { id: 3, name: "Coffee/Espresso Machine", repeatable: false },
@@ -343,8 +764,8 @@
         { id: 8, name: "SURPRISE US!", repeatable: true }
     ];
 
-    let takenGifts = [];
-    let savedMessages = [];
+    let takenGifts =[];
+    let savedMessages =[];
 
     // --- FETCH DATA FROM GOOGLE SHEETS (GET) ---
     async function loadInitialData() {
@@ -352,8 +773,8 @@
             const response = await fetch(SCRIPT_URL);
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
-            takenGifts = data.takenGifts || [];
-            savedMessages = data.savedMessages || [];
+            takenGifts = data.takenGifts ||[];
+            savedMessages = data.savedMessages ||[];
         } catch (error) {
             console.error("Database connection failed:", error);
         } finally {
@@ -392,7 +813,14 @@
         const list = document.getElementById('message-list');
         list.innerHTML = ''; 
         
+        let attendingCount = 0; // NEW: Initialize count for attendees
+        
         savedMessages.forEach(data => {
+            // NEW: Check if this user is attending
+            if (data.status === "be attending") {
+                attendingCount++;
+            }
+
             const card = document.createElement('div');
             card.className = 'message-card';
             const giftText = data.gift !== "No gift selected" ? ` <br><small>Gift: ${data.gift}</small>` : "";
@@ -400,6 +828,12 @@
                               <span>— ${data.name} will ${data.status}${giftText}</span>`;
             list.appendChild(card);
         });
+
+        // NEW: Update the attendance counter element
+        const counterEl = document.getElementById('attendanceCounter');
+        if (counterEl) {
+            counterEl.innerText = `${attendingCount} out of 124 will attend our wedding!`;
+        }
     }
 
     // --- RSVP FORM SUBMISSION (POST) ---
@@ -455,6 +889,44 @@
             submitBtn.innerText = "Submit RSVP";
             submitBtn.disabled = false;
         }
+    });
+
+    // --- CELEBRATION BACKGROUND SLIDESHOW ---
+    const celebTrack = document.getElementById('celebSliderTrack');
+    const celebSlides = document.querySelectorAll('.celeb-slide');
+    let currentSlide = 0;
+
+    if (celebTrack && celebSlides.length > 0) {
+        setInterval(() => {
+            currentSlide++;
+            if (currentSlide >= celebSlides.length) {
+                currentSlide = 0;
+            }
+            celebTrack.style.transform = `translateX(-${currentSlide * 100}vw)`;
+        }, 5000); // Transitions every 5 seconds
+    }
+
+    // --- FAQ ACCORDION LOGIC ---
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            // Close currently active question if it's not the clicked one
+            const active = document.querySelector('.faq-question.active');
+            if(active && active !== question) {
+                active.classList.remove('active');
+                active.nextElementSibling.style.maxHeight = null;
+            }
+            
+            // Toggle clicked question
+            question.classList.toggle('active');
+            const answer = question.nextElementSibling;
+            
+            if (question.classList.contains('active')) {
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            } else {
+                answer.style.maxHeight = null;
+            }
+        });
     });
 
     // --- COUNTDOWN ---
