@@ -334,7 +334,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RJq_ELRutdb_kReIH
     async function loadInitialData() {
         try {
             // A simple GET request without custom headers avoids the CORS preflight trap
-            const response = await fetch(SCRIPT_URL); 
+            const response = await fetch('https://script.google.com/macros/s/AKfycby_RJq_ELRutdb_kReIHS_MsIvwB2k33toDS2NByR7m1Zfk2Yx4KYyk2z7aLAu20u5z/exec'); 
             const data = await response.json();
             takenGifts = data.takenGifts || [];
             savedMessages = data.savedMessages || [];
@@ -416,14 +416,19 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RJq_ELRutdb_kReIH
 try {
             // The magic bullet: 'no-cors' sends the data successfully without 
             // the browser blocking it while waiting for a validated response.
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8'
-                },
-                body: JSON.stringify(payload)
-            });
+            await fetch('https://script.google.com/macros/s/AKfycby_RJq_ELRutdb_kReIHS_MsIvwB2k33toDS2NByR7m1Zfk2Yx4KYyk2z7aLAu20u5z/exec', {
+ 			method: 'POST', // or 'GET'
+  			mode: 'cors', 
+  			cache: 'no-cache',
+  			headers: {
+    			// Do NOT use 'Content-Type': 'application/json'
+    			'Content-Type': 'text/plain;charset=utf-8', 
+  			},
+  			redirect: 'follow', // Essential for Google Apps Script redirects
+  			body: JSON.stringify({ key: 'value' })
+			})
+			.then(response => response.json())
+			.then(data => console.log(data));
 
             alert("RSVP Sent! Thank you " + firstName + ".");
             document.getElementById('rsvpForm').reset();
