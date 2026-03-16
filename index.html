@@ -309,43 +309,34 @@
         /* WHERE SECTION */
         .location-box { margin-bottom: 25px; }
         .loc-title { font-weight: 600; color: var(--gold); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
-        .maps-link { color: var(--burgundy); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(184, 145, 63, 0.4); font-size: 0.9rem; transition: all 0.3s ease; display: inline-block; margin-top: 8px; padding-bottom: 2px; }
-        .maps-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
-        
-        /* MAP EMBED */
-        .maps-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            width: 100%;
+        .maps-link { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            color: var(--burgundy); 
+            font-weight: 600; 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            padding: 10px 18px; 
+            border: 1px solid rgba(184, 145, 63, 0.3); 
+            border-radius: 25px; 
+            margin-top: 12px; 
+            transition: all 0.3s ease; 
+            background: rgba(184, 145, 63, 0.05); 
         }
-        @media (min-width: 768px) {
-            .maps-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 40px;
-            }
+        .maps-link:hover { 
+            background: var(--gold); 
+            color: var(--burgundy); 
+            border-color: var(--gold); 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(184, 145, 63, 0.2); 
         }
-
-        .map-container {
-            width: 100%;
-            height: 250px;
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 0;
-            border: 1px solid rgba(184, 145, 63, 0.2);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .map-container:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
+        .maps-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
 
         /* DRESS CODE SLIDER */
@@ -386,7 +377,7 @@
             transform: scale(1.05);
         }
 
-        /* GALLERY SECTION (EDITORIAL COLLAGE) */
+        /* GALLERY SECTION (FILMSTRIP SLIDER) */
         .gallery-section {
             padding: 100px 20px;
             background-color: var(--cream);
@@ -396,7 +387,7 @@
             overflow: hidden;
         }
         .gallery-header {
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             position: relative;
             z-index: 2;
         }
@@ -406,7 +397,7 @@
             font-size: 2.8rem;
             margin-bottom: 10px;
         }
-        .gallery-header p {
+        .gallery-header p:first-child {
             font-family: 'Montserrat', sans-serif;
             color: var(--gold);
             text-transform: uppercase;
@@ -414,124 +405,17 @@
             font-size: 0.85rem;
             font-weight: 600;
         }
-        
-        .editorial-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-        
-        @media (min-width: 768px) {
-            .editorial-grid {
-                grid-template-columns: 5fr 3fr 3fr;
-                grid-template-rows: 280px 280px;
-                gap: 25px;
-            }
-        }
-        
-        .gallery-item {
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .gallery-img-wrap {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 2px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            z-index: 2;
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1), filter 1.5s ease;
-            display: block;
-            filter: brightness(0.95);
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.08);
-            filter: brightness(1);
-        }
-        
-        /* Overlay for text */
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(64, 21, 28, 0.7) 0%, rgba(0,0,0,0) 60%);
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            display: flex;
-            align-items: flex-end;
-            padding: 30px;
-            z-index: 3;
-        }
-        
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-        
-        .gallery-text {
-            color: var(--cream);
+        .gallery-desc {
+            text-transform: none;
+            letter-spacing: normal;
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 600px;
+            margin: 20px auto 0;
+            line-height: 1.6;
             font-style: italic;
-            transform: translateY(15px);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
-        .gallery-item:hover .gallery-text {
-            transform: translateY(0);
-        }
-
-        /* Offset Gold Frames for Editorial Look */
-        .gallery-frame {
-            position: absolute;
-            border: 1px solid var(--gold);
-            z-index: 1;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 0.6;
-        }
-
-        /* Specific Grid Placements */
-        .item-1 { height: 60vh; }
-        .item-1 .gallery-frame { top: 20px; left: -20px; right: 20px; bottom: -20px; }
-        .item-1:hover .gallery-frame { transform: translate(10px, -10px); }
-        
-        @media (min-width: 768px) {
-            .item-1 { grid-column: 1 / 2; grid-row: 1 / 3; height: 100%; }
-        }
-        
-        .item-2 { height: 40vh; }
-        .item-2 .gallery-frame { top: -15px; left: 15px; right: -15px; bottom: 15px; }
-        .item-2:hover .gallery-frame { transform: translate(-8px, 8px); }
-        
-        @media (min-width: 768px) {
-            .item-2 { grid-column: 2 / 4; grid-row: 1 / 2; height: 100%; }
-        }
-        
-        .item-3 { height: 40vh; }
-        @media (min-width: 768px) {
-            .item-3 { grid-column: 2 / 3; grid-row: 2 / 3; height: 100%; }
-        }
-        
-        .item-4 { height: 40vh; }
-        .item-4 .gallery-frame { top: 15px; left: 15px; right: -15px; bottom: -15px; }
-        .item-4:hover .gallery-frame { transform: translate(-8px, -8px); }
-        
-        @media (min-width: 768px) {
-            .item-4 { grid-column: 3 / 4; grid-row: 2 / 3; height: 100%; }
-        }
-
-        /* Decorative Ampersand */
         .gallery-deco {
             position: absolute;
             top: 45%;
@@ -544,6 +428,70 @@
             pointer-events: none;
             z-index: 1;
             line-height: 1;
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+        .slider-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+            touch-action: pan-y; /* allow vertical scroll, handle horizontal in JS */
+            cursor: grab;
+        }
+        .slider-track:active {
+            cursor: grabbing;
+        }
+        .slide {
+            min-width: 100%;
+            height: 60vh;
+            max-height: 600px;
+            position: relative;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none; /* Prevent image dragging */
+        }
+        .slider-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .indicator:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .indicator.active {
+            background-color: var(--gold);
+            transform: scale(1.5);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
         }
 
         /* ENTOURAGE SECTION */
@@ -1135,51 +1083,39 @@
     <!-- GALLERY SECTION -->
     <section class="gallery-section" id="gallery">
         <div class="gallery-deco">&</div>
+        
+        <!-- Our Story Slider -->
         <div class="gallery-header js-anim">
             <p>Captured Moments</p>
             <h2>Our Story</h2>
-            <p style="text-transform: none; letter-spacing: normal; font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #555; max-width: 600px; margin: 20px auto 0; line-height: 1.6; font-style: italic;">From our first hello to this beautiful promise of forever, every moment has been a chapter in our favorite love story. Here are a few glimpses of the journey that led us to "I do."</p>
+            <p class="gallery-desc">From our first hello to this beautiful promise of forever, every moment has been a chapter in our favorite love story. Here are a few glimpses of the journey that led us to "I do."</p>
         </div>
         
-        <div class="editorial-grid">
-            <div class="gallery-item item-1 js-anim" style="transition-delay: 0.1s;">
-                <div class="gallery-frame"></div>
-                <div class="gallery-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000" alt="Couple Portrait" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-text">The beginning of forever</span>
-                    </div>
-                </div>
+        <div class="slider-container js-anim" id="story-slider-container">
+            <div class="slider-track" id="story-track">
+                <div class="slide"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000" alt="Couple Portrait" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800" alt="Engagement Ring" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800" alt="Holding Hands" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800" alt="Candid Moment" loading="lazy"></div>
             </div>
-            
-            <div class="gallery-item item-2 js-anim" style="transition-delay: 0.2s;">
-                <div class="gallery-frame"></div>
-                <div class="gallery-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800" alt="Engagement Ring" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-text">A promise made</span>
-                    </div>
-                </div>
+            <div class="slider-indicators" id="story-indicators"></div>
+        </div>
+
+        <!-- Prenup Shoot Slider -->
+        <div class="gallery-header js-anim" style="margin-top: 100px;">
+            <p>Before The I Do's</p>
+            <h2>Prenup Shoot</h2>
+            <p class="gallery-desc">A sneak peek into our pre-wedding moments, capturing the anticipation and excitement before our big day.</p>
+        </div>
+        
+        <div class="slider-container js-anim" id="prenup-slider-container">
+            <div class="slider-track" id="prenup-track">
+                <div class="slide"><img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1000" alt="Prenup 1" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800" alt="Prenup 2" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=800" alt="Prenup 3" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800" alt="Prenup 4" loading="lazy"></div>
             </div>
-            
-            <div class="gallery-item item-3 js-anim" style="transition-delay: 0.3s;">
-                <div class="gallery-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800" alt="Holding Hands" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-text">Hand in hand</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="gallery-item item-4 js-anim" style="transition-delay: 0.4s;">
-                <div class="gallery-frame"></div>
-                <div class="gallery-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800" alt="Candid Moment" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-text">Endless laughter</span>
-                    </div>
-                </div>
-            </div>
+            <div class="slider-indicators" id="prenup-indicators"></div>
         </div>
     </section>
 
@@ -1239,13 +1175,19 @@
                         <div class="loc-title">Ceremony</div>
                         <p style="margin: 5px 0; font-size: 1.1rem;">Shrine of Our Lady of Grace</p>
                         <p style="margin: 0 0 10px 0; font-size: 0.85rem; color: #666;">Caloocan City</p>
-                        <a href="https://maps.app.goo.gl/5CCcBkTjDdrai8D79" target="_blank" class="maps-link">Open in Maps App</a>
+                        <a href="https://maps.app.goo.gl/5CCcBkTjDdrai8D79" target="_blank" class="maps-link">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            Open in Maps App
+                        </a>
                     </div>
                     <div class="location-box" style="margin-bottom:0; margin-top: 25px;">
                         <div class="loc-title">Reception</div>
                         <p style="margin: 5px 0; font-size: 1.1rem;">Chef Patrick's Kitchen</p>
                         <p style="margin: 0 0 10px 0; font-size: 0.85rem; color: #666;">Caloocan City</p>
-                        <a href="https://maps.app.goo.gl/ffemshFVf4E9JXGy7" target="_blank" class="maps-link">Open in Maps App</a>
+                        <a href="https://maps.app.goo.gl/ffemshFVf4E9JXGy7" target="_blank" class="maps-link">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            Open in Maps App
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1269,25 +1211,6 @@
                     <div class="dress-img" style="background-image: url('https://content.woolovers.com/img/747x856/fbcec-219181_j86m_deepmaroon_m_8-v2.jpg');"></div>
                     <div class="dress-img" style="background-image: url('https://presleycouture.com/cdn/shop/products/LLP_9554_1200x1200.jpg?v=1691787191');"></div>
                     <div class="dress-img" style="background-image: url('https://img01.ztat.net/article/spp-media-p1/1b65fca859bc4610954440433213c8b4/d73fdfea719a44fd8de16287937328fe.jpg?imwidth=400');"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- NEW MAPS SECTION -->
-        <div style="margin-top: 80px; text-align: center;">
-            <h3 class="js-anim" style="color: var(--burgundy); font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 40px;">Getting There</h3>
-            <div class="maps-grid">
-                <div class="info-card js-anim" style="padding: 20px;">
-                    <h4 style="color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-size: 0.9rem;">Ceremony Map</h4>
-                    <div class="map-container">
-                        <iframe src="https://maps.google.com/maps?q=Shrine%20of%20Our%20Lady%20of%20Grace,%20Caloocan%20City&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                </div>
-                <div class="info-card js-anim" style="padding: 20px;">
-                    <h4 style="color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-size: 0.9rem;">Reception Map</h4>
-                    <div class="map-container">
-                        <iframe src="https://maps.google.com/maps?q=Chef%20Patrick's%20Kitchen,%20Caloocan%20City&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1755,6 +1678,135 @@
             submitBtn.disabled = false;
         }
     });
+
+    // --- GALLERY SLIDER LOGIC ---
+    function initSlider(trackId, indicatorsId) {
+        const track = document.getElementById(trackId);
+        const indicatorsContainer = document.getElementById(indicatorsId);
+        if (!track || !indicatorsContainer) return;
+
+        const slides = track.querySelectorAll('.slide');
+        const slideCount = slides.length;
+        let currentIndex = 0;
+        let autoPlayInterval;
+        let startX = 0;
+        let isDragging = false;
+
+        // Create indicators
+        for (let i = 0; i < slideCount; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('indicator');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateSlider();
+                resetAutoPlay();
+            });
+            indicatorsContainer.appendChild(dot);
+        }
+        const indicators = indicatorsContainer.querySelectorAll('.indicator');
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            indicators.forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slideCount;
+            updateSlider();
+        }
+
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayInterval);
+            startAutoPlay();
+        }
+
+        // Touch events for swiping
+        track.addEventListener('touchstart', touchStart, {passive: true});
+        track.addEventListener('touchend', touchEnd);
+        track.addEventListener('touchmove', touchMove, {passive: false});
+
+        // Mouse events for swiping
+        track.addEventListener('mousedown', touchStart);
+        track.addEventListener('mouseup', touchEnd);
+        track.addEventListener('mouseleave', () => {
+            if (isDragging) touchEnd({ type: 'mouseleave' });
+        });
+        track.addEventListener('mousemove', touchMove);
+
+        function getPositionX(event) {
+            return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+        }
+
+        function touchStart(event) {
+            isDragging = true;
+            startX = getPositionX(event);
+            clearInterval(autoPlayInterval); // Pause auto-play while dragging
+            track.style.transition = 'none'; // Remove transition for smooth dragging
+        }
+
+        function touchMove(event) {
+            if (!isDragging) return;
+            // Prevent default scrolling when swiping horizontally
+            if(event.cancelable) {
+                event.preventDefault();
+            }
+            const currentPosition = getPositionX(event);
+            const diff = currentPosition - startX;
+            // Calculate percentage moved
+            const movePercent = (diff / track.clientWidth) * 100;
+            const currentTransform = -(currentIndex * 100) + movePercent;
+            
+            // Limit dragging past edges
+            if (currentTransform > 0) {
+                track.style.transform = `translateX(0%)`;
+            } else if (currentTransform < -(slideCount - 1) * 100) {
+                track.style.transform = `translateX(-${(slideCount - 1) * 100}%)`;
+            } else {
+                track.style.transform = `translateX(${currentTransform}%)`;
+            }
+        }
+
+        function touchEnd(event) {
+            if (!isDragging) return;
+            isDragging = false;
+            track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+            
+            let endX;
+            if (event.type.includes('mouse') || event.type === 'mouseleave') {
+                endX = event.pageX || startX; // fallback to startX if pageX is undefined on mouseleave
+            } else {
+                endX = event.changedTouches[0].clientX;
+            }
+            
+            const diff = endX - startX;
+            const threshold = track.clientWidth * 0.15; // 15% swipe to change slide
+
+            if (diff < -threshold && currentIndex < slideCount - 1) {
+                currentIndex++;
+            } else if (diff > threshold && currentIndex > 0) {
+                currentIndex--;
+            }
+            
+            updateSlider();
+            startAutoPlay(); // Resume auto-play
+        }
+
+        startAutoPlay();
+    }
+
+    initSlider('story-track', 'story-indicators');
+    initSlider('prenup-track', 'prenup-indicators');
 
     // --- CELEBRATION BACKGROUND SLIDESHOW ---
     const celebTrack = document.getElementById('celebSliderTrack');
