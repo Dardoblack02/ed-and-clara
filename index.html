@@ -633,6 +633,7 @@
             justify-content: center;
             text-align: center;
             min-height: 100px;
+            cursor: pointer;
         }
         .gift-item:hover {
             transform: translateY(-5px);
@@ -645,6 +646,7 @@
             color: #999;
             border-color: #eee;
             box-shadow: none;
+            cursor: default;
         }
         .gift-item.taken:hover {
             transform: none;
@@ -1633,6 +1635,30 @@
                                 ${iconSvg}
                                 <span>${gift.name} ${isTaken ? '<br><small style="font-size: 0.75rem; font-weight: normal; margin-top: 4px; display: block;">(Taken)</small>' : ''}</span>
                               </div>`;
+            
+            if (!isTaken) {
+                item.addEventListener('click', () => {
+                    select.value = gift.name;
+                    // Trigger change event if there are any listeners
+                    select.dispatchEvent(new Event('change'));
+                    
+                    // Scroll to RSVP section
+                    const rsvpSection = document.getElementById('rsvp');
+                    if (rsvpSection) {
+                        rsvpSection.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Briefly highlight the select box to draw attention
+                        select.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+                        select.style.boxShadow = '0 0 0 3px rgba(184, 145, 63, 0.3)';
+                        select.style.borderColor = 'var(--gold)';
+                        setTimeout(() => {
+                            select.style.boxShadow = '';
+                            select.style.borderColor = '';
+                        }, 1500);
+                    }
+                });
+            }
+            
             display.appendChild(item);
             if (typeof observer !== 'undefined') observer.observe(item);
 
