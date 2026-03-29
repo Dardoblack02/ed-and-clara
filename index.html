@@ -377,123 +377,6 @@
             transform: scale(1.05);
         }
 
-        /* GALLERY SECTION (FILMSTRIP SLIDER) */
-        .gallery-section {
-            padding: 100px 20px;
-            background-color: var(--cream);
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            overflow: hidden;
-        }
-        .gallery-header {
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 2;
-        }
-        .gallery-header h2 {
-            font-family: 'Playfair Display', serif;
-            color: var(--burgundy);
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-        }
-        .gallery-header p:first-child {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .gallery-desc {
-            text-transform: none;
-            letter-spacing: normal;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            color: #555;
-            max-width: 600px;
-            margin: 20px auto 0;
-            line-height: 1.6;
-            font-style: italic;
-        }
-        .gallery-deco {
-            position: absolute;
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Playfair Display', serif;
-            font-size: 24rem;
-            color: var(--gold);
-            opacity: 0.05;
-            pointer-events: none;
-            z-index: 1;
-            line-height: 1;
-        }
-
-        /* Slider Styles */
-        .slider-container {
-            position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            z-index: 2;
-        }
-        .slider-track {
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            will-change: transform;
-            touch-action: pan-y; /* allow vertical scroll, handle horizontal in JS */
-            cursor: grab;
-        }
-        .slider-track:active {
-            cursor: grabbing;
-        }
-        .slide {
-            min-width: 100%;
-            height: 60vh;
-            max-height: 600px;
-            position: relative;
-        }
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none; /* Prevent image dragging */
-        }
-        .slider-indicators {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 12px;
-            z-index: 10;
-            padding: 10px 15px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-        }
-        .indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-        .indicator:hover {
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-        .indicator.active {
-            background-color: var(--gold);
-            transform: scale(1.5);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-        }
-
         /* ENTOURAGE SECTION */
         .entourage-section { padding: 80px 20px; text-align: center; background-color: var(--white); }
         .entourage-section h2 { color: var(--burgundy); font-size: 2.5rem; margin-bottom: 40px; }
@@ -732,6 +615,30 @@
         
         .btn-submit:active {
             transform: translateY(0);
+        }
+
+        /* PULSE ANIMATION FOR PREFERRED GIFT */
+        @keyframes pulse-gold {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-color: rgba(184, 145, 63, 0.2); }
+            50% { transform: scale(1.03); box-shadow: 0 8px 25px rgba(184, 145, 63, 0.3); border-color: var(--gold); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-color: rgba(184, 145, 63, 0.2); }
+        }
+        .gift-item.preferred {
+            animation: pulse-gold 3s infinite ease-in-out;
+            border-color: var(--gold-light);
+            background: linear-gradient(to bottom, var(--cream), #fff);
+        }
+        .preferred-badge {
+            color: var(--burgundy);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.7rem;
+            display: block;
+            margin-top: 4px;
+            background: var(--gold-pale);
+            padding: 2px 8px;
+            border-radius: 10px;
         }
 
         /* MESSAGE BOARD */
@@ -1058,7 +965,6 @@
 
     <nav class="floating-nav">
         <a href="#home">Save The Date</a>
-        <a href="#gallery">Gallery</a>
         <a href="#celebration">Celebration</a>
         <!-- NEW ENTOURAGE LINK -->
         <a href="#entourage">Entourage</a>
@@ -1080,51 +986,6 @@
         </div>
     </section>
     
-    <!-- GALLERY SECTION -->
-    <section class="gallery-section" id="gallery">
-        <div class="gallery-deco">&</div>
-        
-        <!-- Our Story Slider -->
-        <div class="gallery-header js-anim">
-            <p>Captured Moments</p>
-            <h2>Our Story</h2>
-            <p class="gallery-desc">From our first hello to this beautiful promise of forever, every moment has been a chapter in our favorite love story. Here are a few glimpses of the journey that led us to "I do."</p>
-        </div>
-        
-        <div class="slider-container js-anim" id="story-slider-container">
-            <div class="slider-track" id="story-track">
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2016.jpeg" alt="Our Story 2016" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2017.jpg" alt="Our Story 2017" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2018.jpg" alt="Our Story 2018" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2019.jpg" alt="Our Story 2019" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2020.jpg" alt="Our Story 2020" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2021.jpg" alt="Our Story 2021" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2022.jpg" alt="Our Story 2022" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2023.jpg" alt="Our Story 2023" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2024.jpg" alt="Our Story 2024" loading="lazy"></div>
-                <div class="slide"><img src="https://dardoblack02.github.io/ed-and-clara/OUR_STORY_2025.jpg" alt="Our Story 2025" loading="lazy"></div>
-            </div>
-            <div class="slider-indicators" id="story-indicators"></div>
-        </div>
-
-        <!-- Prenup Shoot Slider -->
-        <div class="gallery-header js-anim" style="margin-top: 100px;">
-            <p>Before The I Do's</p>
-            <h2>Prenup Shoot</h2>
-            <p class="gallery-desc">A sneak peek into our pre-wedding moments, capturing the anticipation and excitement before our big day.</p>
-        </div>
-        
-        <div class="slider-container js-anim" id="prenup-slider-container">
-            <div class="slider-track" id="prenup-track">
-                <div class="slide"><img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1000" alt="Prenup 1" loading="lazy"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800" alt="Prenup 2" loading="lazy"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=800" alt="Prenup 3" loading="lazy"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800" alt="Prenup 4" loading="lazy"></div>
-            </div>
-            <div class="slider-indicators" id="prenup-indicators"></div>
-        </div>
-    </section>
-
     <!-- CELEBRATION SECTION -->
     <section class="details-section" id="celebration">
         
@@ -1512,13 +1373,13 @@
 
     // --- GIFT DATA ---
     const giftRegistry =[
-        { id: 1, name: "Microwave Oven", repeatable: false },
-        { id: 2, name: "Robot Vacuum", repeatable: false },
-        { id: 3, name: "Coffee/Espresso Machine", repeatable: false },
-        { id: 4, name: "Air Purifier", repeatable: false },
-        { id: 5, name: "Blender", repeatable: false },
-        { id: 6, name: "Cooking Ware Set", repeatable: true },
-        { id: 7, name: "Cash Gift", repeatable: true },
+        { id: 1, name: "Microwave Oven<br>(LG 25L NeoChef)", repeatable: false },
+        { id: 2, name: "Robot Vacuum<br>(Lefant M330 Pro)", repeatable: false },
+        { id: 3, name: "Coffee Machine<br>(HiBREW)", repeatable: false },
+        { id: 4, name: "Air Purifier<br>(Haier P1U1)", repeatable: false },
+        { id: 5, name: "Shower Water Heater<br>(Panasonic)", repeatable: false },
+        { id: 6, name: "Cooking Ware Set<br>(Redchef Sea Series)", repeatable: false },
+        { id: 7, name: "Cash Gift<br><span class='preferred-badge'>(PREFERRED)</span>", repeatable: true },
         { id: 8, name: "SURPRISE US!", repeatable: true }
     ];
 
@@ -1551,9 +1412,10 @@
 
         giftRegistry.forEach(gift => {
             const isTaken = !gift.repeatable && takenGifts.includes(gift.id);
+            const isPreferred = gift.name.includes('PREFERRED');
             
             const item = document.createElement('div');
-            item.className = `gift-item ${isTaken ? 'taken' : ''}`;
+            item.className = `gift-item ${isTaken ? 'taken' : ''} ${isPreferred ? 'preferred' : ''}`;
             
             // Add a subtle icon based on whether it's taken or not
             const iconSvg = isTaken 
@@ -1626,7 +1488,7 @@
         // NEW: Update the attendance counter element
         const counterEl = document.getElementById('attendanceCounter');
         if (counterEl) {
-            counterEl.innerText = `${attendingCount} out of 124 will attend our wedding!`;
+            counterEl.innerText = `${attendingCount} out of 130 will attend our wedding!`;
         }
     }
 
@@ -1684,135 +1546,6 @@
             submitBtn.disabled = false;
         }
     });
-
-    // --- GALLERY SLIDER LOGIC ---
-    function initSlider(trackId, indicatorsId) {
-        const track = document.getElementById(trackId);
-        const indicatorsContainer = document.getElementById(indicatorsId);
-        if (!track || !indicatorsContainer) return;
-
-        const slides = track.querySelectorAll('.slide');
-        const slideCount = slides.length;
-        let currentIndex = 0;
-        let autoPlayInterval;
-        let startX = 0;
-        let isDragging = false;
-
-        // Create indicators
-        for (let i = 0; i < slideCount; i++) {
-            const dot = document.createElement('div');
-            dot.classList.add('indicator');
-            if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                currentIndex = i;
-                updateSlider();
-                resetAutoPlay();
-            });
-            indicatorsContainer.appendChild(dot);
-        }
-        const indicators = indicatorsContainer.querySelectorAll('.indicator');
-
-        function updateSlider() {
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
-            indicators.forEach((dot, index) => {
-                if (index === currentIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % slideCount;
-            updateSlider();
-        }
-
-        function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, 5000);
-        }
-
-        function resetAutoPlay() {
-            clearInterval(autoPlayInterval);
-            startAutoPlay();
-        }
-
-        // Touch events for swiping
-        track.addEventListener('touchstart', touchStart, {passive: true});
-        track.addEventListener('touchend', touchEnd);
-        track.addEventListener('touchmove', touchMove, {passive: false});
-
-        // Mouse events for swiping
-        track.addEventListener('mousedown', touchStart);
-        track.addEventListener('mouseup', touchEnd);
-        track.addEventListener('mouseleave', () => {
-            if (isDragging) touchEnd({ type: 'mouseleave' });
-        });
-        track.addEventListener('mousemove', touchMove);
-
-        function getPositionX(event) {
-            return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-        }
-
-        function touchStart(event) {
-            isDragging = true;
-            startX = getPositionX(event);
-            clearInterval(autoPlayInterval); // Pause auto-play while dragging
-            track.style.transition = 'none'; // Remove transition for smooth dragging
-        }
-
-        function touchMove(event) {
-            if (!isDragging) return;
-            // Prevent default scrolling when swiping horizontally
-            if(event.cancelable) {
-                event.preventDefault();
-            }
-            const currentPosition = getPositionX(event);
-            const diff = currentPosition - startX;
-            // Calculate percentage moved
-            const movePercent = (diff / track.clientWidth) * 100;
-            const currentTransform = -(currentIndex * 100) + movePercent;
-            
-            // Limit dragging past edges
-            if (currentTransform > 0) {
-                track.style.transform = `translateX(0%)`;
-            } else if (currentTransform < -(slideCount - 1) * 100) {
-                track.style.transform = `translateX(-${(slideCount - 1) * 100}%)`;
-            } else {
-                track.style.transform = `translateX(${currentTransform}%)`;
-            }
-        }
-
-        function touchEnd(event) {
-            if (!isDragging) return;
-            isDragging = false;
-            track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-            
-            let endX;
-            if (event.type.includes('mouse') || event.type === 'mouseleave') {
-                endX = event.pageX || startX; // fallback to startX if pageX is undefined on mouseleave
-            } else {
-                endX = event.changedTouches[0].clientX;
-            }
-            
-            const diff = endX - startX;
-            const threshold = track.clientWidth * 0.15; // 15% swipe to change slide
-
-            if (diff < -threshold && currentIndex < slideCount - 1) {
-                currentIndex++;
-            } else if (diff > threshold && currentIndex > 0) {
-                currentIndex--;
-            }
-            
-            updateSlider();
-            startAutoPlay(); // Resume auto-play
-        }
-
-        startAutoPlay();
-    }
-
-    initSlider('story-track', 'story-indicators');
-    initSlider('prenup-track', 'prenup-indicators');
 
     // --- CELEBRATION BACKGROUND SLIDESHOW ---
     const celebTrack = document.getElementById('celebSliderTrack');
