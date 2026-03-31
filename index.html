@@ -1160,7 +1160,7 @@
                 <p>Santie Gatchalian & Lei Xjiemiz Del Mundo Cabalquinto</p>
                 
                 <p class="secondary-sponsor-role">To Bind Us Together (Cord Sponsors)</p>
-                <p>Rainier Joseph Sanchez<br>or<br>John Gabrielle Ofiangga<br>& Xandra Jane Dating</p>
+                <p>John Gabrielle Ofiangga & Xandra Jane Dating</p>
             </div>
 
             <div class="entourage-grid-3" style="margin-top: 20px;">
@@ -1413,6 +1413,7 @@
         giftRegistry.forEach(gift => {
             const isTaken = !gift.repeatable && takenGifts.includes(gift.id);
             const isPreferred = gift.name.includes('PREFERRED');
+            const cleanName = gift.name.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, '');
             
             const item = document.createElement('div');
             item.className = `gift-item ${isTaken ? 'taken' : ''} ${isPreferred ? 'preferred' : ''}`;
@@ -1429,7 +1430,7 @@
             
             if (!isTaken) {
                 item.addEventListener('click', () => {
-                    select.value = gift.name;
+                    select.value = cleanName;
                     // Trigger change event if there are any listeners
                     select.dispatchEvent(new Event('change'));
                     
@@ -1454,9 +1455,9 @@
             if (typeof observer !== 'undefined') observer.observe(item);
 
             const opt = document.createElement('option');
-            opt.value = gift.name;
+            opt.value = cleanName;
             opt.dataset.id = gift.id;
-            opt.innerText = gift.name + (isTaken ? ' (Already Promised)' : '');
+            opt.innerText = cleanName + (isTaken ? ' (Already Promised)' : '');
             if (isTaken) opt.disabled = true;
             select.appendChild(opt);
         });
@@ -1488,7 +1489,7 @@
         // NEW: Update the attendance counter element
         const counterEl = document.getElementById('attendanceCounter');
         if (counterEl) {
-            counterEl.innerText = `${attendingCount} out of 130 will attend our wedding!`;
+            counterEl.innerText = `${attendingCount} out of 137 will attend our wedding!`;
         }
     }
 
