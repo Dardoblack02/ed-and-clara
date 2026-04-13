@@ -969,6 +969,61 @@
                 font-size: 0.8rem;
             }
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+        
+        /* FALLING PETALS */
+        .petal {
+            position: fixed;
+            top: -10vh;
+            left: 0;
+            width: var(--size, 12px);
+            height: calc(var(--size, 12px) * 1.2);
+
+            background: radial-gradient(circle at 30% 30%, #c72c5a 0%, #8b1235 60%, #5a0c24 100%);
+            border-radius: 50% 0 50% 50%;
+
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 9999;
+
+            animation: fall var(--duration, 10s) linear forwards,
+                       sway var(--sway-duration, 4s) ease-in-out infinite alternate;
+
+            box-shadow: 
+                0 2px 6px rgba(0,0,0,0.25),
+                inset 0 0 4px rgba(255,255,255,0.2);
+
+            will-change: top, translate, rotate;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10vh;
+                rotate: 0deg;
+            }
+            100% {
+                top: 110vh;
+                rotate: 360deg;
+            }
+        }
+
+        @keyframes sway {
+            0% {
+                translate: -20px 0;
+            }
+            100% {
+                translate: 20px 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -992,7 +1047,7 @@
     </nav>
 
     <section class="hero" id="home">
-        <p class="subtitle" style="color: var(--gold); font-weight: 600; letter-spacing: 6px; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">WE ARE GETTING MARRIED</p>
+        <p id="hero-subtitle" class="subtitle" style="color: var(--gold); font-weight: 600; letter-spacing: 6px; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">WE ARE GETTING MARRIED</p>
         <h1 style="font-family: 'Playfair Display', serif; font-style: italic; text-shadow: 0 4px 10px rgba(0,0,0,0.6); margin: 0;">Edward & Clara</h1>
         <p style="font-size: 1.2rem; letter-spacing: 3px; margin-top: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">JUNE 20, 2026 | CALOOCAN CITY</p>
         <a href="#celebration" class="clickable-date">VIEW DETAILS</a>
@@ -1447,8 +1502,8 @@
         const display = document.getElementById('registryDisplay');
         const select = document.getElementById('giftSelection');
         
-        display.innerHTML = '';
-        select.innerHTML = '<option value="No gift selected">-- Select a gift from our registry --</option>';
+        if (display) display.innerHTML = '';
+        if (select) select.innerHTML = '<option value="No gift selected">-- Select a gift from our registry --</option>';
 
         giftRegistry.forEach(gift => {
             const isTaken = !gift.repeatable && takenGifts.includes(gift.id);
@@ -1470,9 +1525,11 @@
             
             if (!isTaken) {
                 item.addEventListener('click', () => {
-                    select.value = cleanName;
-                    // Trigger change event if there are any listeners
-                    select.dispatchEvent(new Event('change'));
+                    if (select) {
+                        select.value = cleanName;
+                        // Trigger change event if there are any listeners
+                        select.dispatchEvent(new Event('change'));
+                    }
                     
                     // Scroll to RSVP section
                     const rsvpSection = document.getElementById('rsvp');
@@ -1480,26 +1537,30 @@
                         rsvpSection.scrollIntoView({ behavior: 'smooth' });
                         
                         // Briefly highlight the select box to draw attention
-                        select.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
-                        select.style.boxShadow = '0 0 0 3px rgba(184, 145, 63, 0.3)';
-                        select.style.borderColor = 'var(--gold)';
-                        setTimeout(() => {
-                            select.style.boxShadow = '';
-                            select.style.borderColor = '';
-                        }, 1500);
+                        if (select) {
+                            select.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+                            select.style.boxShadow = '0 0 0 3px rgba(184, 145, 63, 0.3)';
+                            select.style.borderColor = 'var(--gold)';
+                            setTimeout(() => {
+                                select.style.boxShadow = '';
+                                select.style.borderColor = '';
+                            }, 1500);
+                        }
                     }
                 });
             }
             
-            display.appendChild(item);
+            if (display) display.appendChild(item);
             if (typeof observer !== 'undefined') observer.observe(item);
 
-            const opt = document.createElement('option');
-            opt.value = cleanName;
-            opt.dataset.id = gift.id;
-            opt.innerText = cleanName + (isTaken ? ' (Already Promised)' : '');
-            if (isTaken) opt.disabled = true;
-            select.appendChild(opt);
+            if (select) {
+                const opt = document.createElement('option');
+                opt.value = cleanName;
+                opt.dataset.id = gift.id;
+                opt.innerText = cleanName + (isTaken ? ' (Already Promised)' : '');
+                if (isTaken) opt.disabled = true;
+                select.appendChild(opt);
+            }
         });
     }
 
@@ -1533,8 +1594,42 @@
         }
     }
 
+    // --- RSVP DEADLINE CHECK ---
+    function checkRSVPDeadline() {
+        const rsvpDeadline = new Date("June 1, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        
+        if (now >= rsvpDeadline) {
+            const rsvpContainer = document.querySelector('.rsvp-container');
+            if (rsvpContainer) {
+                rsvpContainer.innerHTML = `
+                    <h2>RSVP Closed</h2>
+                    <p style="margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: var(--text);">
+                        The deadline to RSVP and select gifts from the registry has passed.<br><br>
+                        We are so excited to celebrate with everyone who has registered! If you have any urgent questions, please contact Edward or Clara directly.
+                    </p>
+                `;
+            }
+            
+            const registrySection = document.getElementById('registry');
+            if (registrySection) {
+                registrySection.innerHTML = `
+                    <h2 style="color: var(--burgundy); font-size: 2.5rem; margin-bottom: 10px;">Wedding Registry</h2>
+                    <p style="max-width: 600px; margin: 0 auto 40px auto; font-style: italic; color: #666; line-height: 1.6;">
+                        Our wedding registry is now closed as we finalize preparations for our big day. Thank you so much for your generosity and love!
+                    </p>
+                `;
+            }
+            return true;
+        }
+        return false;
+    }
+    const isRSVPClosed = checkRSVPDeadline();
+
     // --- RSVP FORM SUBMISSION (POST) ---
-    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+    const rsvpForm = document.getElementById('rsvpForm');
+    if (rsvpForm && !isRSVPClosed) {
+        rsvpForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const submitBtn = document.querySelector('.btn-submit');
@@ -1587,6 +1682,7 @@
             submitBtn.disabled = false;
         }
     });
+    }
 
     // --- CELEBRATION BACKGROUND SLIDESHOW ---
     const celebTrack = document.getElementById('celebSliderTrack');
@@ -1627,15 +1723,137 @@
     });
 
     // --- COUNTDOWN ---
+    function startFallingPetals() {
+        if (window.petalsStarted) return;
+        window.petalsStarted = true;
+        
+        const petalContainer = document.createElement('div');
+        petalContainer.id = 'petal-container';
+        petalContainer.style.position = 'fixed';
+        petalContainer.style.top = '0';
+        petalContainer.style.left = '0';
+        petalContainer.style.width = '100%';
+        petalContainer.style.height = '100%';
+        petalContainer.style.pointerEvents = 'none';
+        petalContainer.style.zIndex = '9999';
+        document.body.appendChild(petalContainer);
+
+        setInterval(() => {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            // Randomize properties
+            const size = Math.random() * 12 + 10; // 10px to 22px
+            petal.style.setProperty('--size', `${size}px`);
+            petal.style.left = `${Math.random() * 100}vw`;
+            
+            const duration = Math.random() * 6 + 6; // 6s to 12s
+            petal.style.setProperty('--duration', `${duration}s`);
+            
+            const swayDuration = Math.random() * 3 + 2; // 2s to 5s
+            petal.style.setProperty('--sway-duration', `${swayDuration}s`);
+            
+            petalContainer.appendChild(petal);
+            
+            // Remove after animation
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000);
+        }, 400); // New petal every 400ms
+    }
+
     const target = new Date("June 20, 2026 09:00:00").getTime();
-    setInterval(() => {
+    const marriedTime = new Date("June 20, 2026 11:00:00").getTime();
+    let currentState = -1; // -1: uninitialized, 0: countdown, 1: today, 2: married
+
+    const countdownTimer = setInterval(() => {
         const now = new Date().getTime();
-        const dist = target - now;
-        if (dist < 0) return;
-        document.getElementById("days").innerText = Math.floor(dist / 86400000).toString().padStart(2, '0');
-        document.getElementById("hours").innerText = Math.floor((dist % 86400000) / 3600000).toString().padStart(2, '0');
-        document.getElementById("minutes").innerText = Math.floor((dist % 3600000) / 60000).toString().padStart(2, '0');
-        document.getElementById("seconds").innerText = Math.floor((dist % 60000) / 1000).toString().padStart(2, '0');
+        
+        let newState = 0;
+        if (now >= marriedTime) {
+            newState = 2;
+        } else if (now >= target) {
+            newState = 1;
+        } else {
+            newState = 0;
+        }
+        
+        const countdownEl = document.getElementById("countdown");
+        const heroSubtitle = document.getElementById("hero-subtitle");
+        
+        if (currentState !== newState) {
+            if (currentState === -1) {
+                // First load, no fade-out needed if it's already past the countdown
+                if (newState === 1) {
+                    countdownEl.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; padding: 0 20px; opacity: 0; animation: fadeIn 1.5s ease forwards;">
+                            <div style="font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--gold); text-shadow: 0 4px 10px rgba(0,0,0,0.6); font-style: italic; letter-spacing: 2px;">Today is the Day!</div>
+                            <div style="font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: var(--ivory); text-shadow: 0 2px 5px rgba(0,0,0,0.8); max-width: 550px; line-height: 1.6; letter-spacing: 1px;">
+                                The wait is over, and our forever begins today. We are so incredibly excited to finally say "I do" and celebrate this beautiful milestone with all of our beloved family and friends.
+                            </div>
+                        </div>
+                    `;
+                } else if (newState === 2) {
+                    if (heroSubtitle) heroSubtitle.innerText = "WE ARE MARRIED";
+                    countdownEl.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; padding: 0 20px; opacity: 0; animation: fadeIn 1.5s ease forwards;">
+                            <div style="font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--gold); text-shadow: 0 4px 10px rgba(0,0,0,0.6); font-style: italic; letter-spacing: 2px;">We are Married!</div>
+                            <div style="font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: var(--ivory); text-shadow: 0 2px 5px rgba(0,0,0,0.8); max-width: 550px; line-height: 1.6; letter-spacing: 1px; font-style: italic;">
+                                "So they are no longer two, but one flesh. Therefore what God has joined together let no one separate."<br><span style="font-size: 0.9rem; font-weight: 600; margin-top: 10px; display: inline-block; color: var(--gold);">— Matthew 19:6</span>
+                            </div>
+                        </div>
+                    `;
+                    clearInterval(countdownTimer);
+                    startFallingPetals();
+                }
+            } else {
+                // Transitioning from an older state (e.g. 0 -> 1, or 1 -> 2)
+                Array.from(countdownEl.children).forEach(child => {
+                    child.style.animation = "fadeOut 1s ease forwards";
+                });
+                
+                if (newState === 2 && heroSubtitle) {
+                    heroSubtitle.style.animation = "fadeOut 1s ease forwards";
+                }
+                
+                setTimeout(() => {
+                    if (newState === 1) {
+                        countdownEl.innerHTML = `
+                            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; padding: 0 20px; opacity: 0; animation: fadeIn 1.5s ease forwards;">
+                                <div style="font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--gold); text-shadow: 0 4px 10px rgba(0,0,0,0.6); font-style: italic; letter-spacing: 2px;">Today is the Day!</div>
+                                <div style="font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: var(--ivory); text-shadow: 0 2px 5px rgba(0,0,0,0.8); max-width: 550px; line-height: 1.6; letter-spacing: 1px;">
+                                    The wait is over, and our forever begins today. We are so incredibly excited to finally say "I do" and celebrate this beautiful milestone with all of our beloved family and friends.
+                                </div>
+                            </div>
+                        `;
+                    } else if (newState === 2) {
+                        if (heroSubtitle) {
+                            heroSubtitle.innerText = "WE ARE MARRIED";
+                            heroSubtitle.style.animation = "fadeIn 1.5s ease forwards";
+                        }
+                        countdownEl.innerHTML = `
+                            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; padding: 0 20px; opacity: 0; animation: fadeIn 1.5s ease forwards;">
+                                <div style="font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--gold); text-shadow: 0 4px 10px rgba(0,0,0,0.6); font-style: italic; letter-spacing: 2px;">We are Married!</div>
+                                <div style="font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: var(--ivory); text-shadow: 0 2px 5px rgba(0,0,0,0.8); max-width: 550px; line-height: 1.6; letter-spacing: 1px; font-style: italic;">
+                                    "So they are no longer two, but one flesh. Therefore what God has joined together let no one separate."<br><span style="font-size: 0.9rem; font-weight: 600; margin-top: 10px; display: inline-block; color: var(--gold);">— Matthew 19:6</span>
+                                </div>
+                            </div>
+                        `;
+                        clearInterval(countdownTimer);
+                        startFallingPetals();
+                    }
+                }, 1000);
+            }
+            currentState = newState;
+        }
+        
+        if (currentState === 0) {
+            const dist = target - now;
+            document.getElementById("days").innerText = Math.floor(dist / 86400000).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((dist % 86400000) / 3600000).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((dist % 3600000) / 60000).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((dist % 60000) / 1000).toString().padStart(2, '0');
+        }
     }, 1000);
 
     // --- MUSIC PLAYER LOGIC ---
