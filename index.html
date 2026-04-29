@@ -1024,6 +1024,128 @@
                 translate: 20px 0;
             }
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+        
+        /* FALLING PETALS */
+        .petal {
+            position: fixed;
+            top: -10vh;
+            left: 0;
+            width: var(--size, 12px);
+            height: calc(var(--size, 12px) * 1.2);
+
+            background: radial-gradient(circle at 30% 30%, #c72c5a 0%, #8b1235 60%, #5a0c24 100%);
+            border-radius: 50% 0 50% 50%;
+
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 9999;
+
+            animation: fall var(--duration, 10s) linear forwards,
+                       sway var(--sway-duration, 4s) ease-in-out infinite alternate;
+
+            box-shadow: 
+                0 2px 6px rgba(0,0,0,0.25),
+                inset 0 0 4px rgba(255,255,255,0.2);
+
+            will-change: top, translate, rotate;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10vh;
+                rotate: 0deg;
+            }
+            100% {
+                top: 110vh;
+                rotate: 360deg;
+            }
+        }
+
+        @keyframes sway {
+            0% {
+                translate: -20px 0;
+            }
+            100% {
+                translate: 20px 0;
+            }
+        }
+        /* GALLERY SECTION */
+        .gallery-section {
+            padding: 80px 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            max-width: 1100px;
+            margin: 40px auto 0;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            aspect-ratio: 3/4;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.3s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.85);
+        }
+        .gallery-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(40, 5, 15, 0.95);
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .gallery-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 4px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            border: 1px solid var(--gold);
+        }
+        .gallery-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--ivory);
+            font-size: 40px;
+            cursor: pointer;
+            line-height: 1;
+            font-family: sans-serif;
+        }
+        .gallery-modal-close:hover {
+            color: var(--gold);
+        }
     </style>
 </head>
 <body>
@@ -1039,6 +1161,7 @@
     <nav class="floating-nav">
         <a href="#home">Save The Date</a>
         <a href="#celebration">Celebration</a>
+        <a href="#gallery">Gallery</a>
         <!-- NEW ENTOURAGE LINK -->
         <a href="#entourage">Entourage</a>
         <a href="#registry">Registry</a>
@@ -1168,6 +1291,32 @@
                     <div class="dress-img" style="background-image: url('https://presleycouture.com/cdn/shop/products/LLP_9554_1200x1200.jpg?v=1691787191');"></div>
                     <div class="dress-img" style="background-image: url('https://img01.ztat.net/article/spp-media-p1/1b65fca859bc4610954440433213c8b4/d73fdfea719a44fd8de16287937328fe.jpg?imwidth=400');"></div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section class="gallery-section" id="gallery">
+        <h2 style="color: var(--burgundy); font-size: 2.5rem; margin-bottom: 10px;">Our Journey</h2>
+        <p style="font-style: italic; color: #666; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6;">Two souls, one beautiful story. Here are some moments captured from our prenuptial shoot.</p>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openGalleryModal(this)">
+                <img src="https://dardoblack02.github.io/ed-and-clara/1.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 1" loading="lazy">
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(this)">
+                <img src="https://dardoblack02.github.io/ed-and-clara/2.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 2" loading="lazy">
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(this)">
+                <img src="https://dardoblack02.github.io/ed-and-clara/3.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 3" loading="lazy">
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(this)">
+                <img src="https://dardoblack02.github.io/ed-and-clara/4.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 4" loading="lazy">
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(this)">
+                <img src="https://dardoblack02.github.io/ed-and-clara/5.1.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 5" loading="lazy">
+            </div>
+            <div class="gallery-item" onclick="openGalleryModal(this)">
+                <img src="https://dardoblack02.github.io/ed-and-clara/6.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 6" loading="lazy">
             </div>
         </div>
     </section>
@@ -1461,6 +1610,12 @@
         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
         RSVP Now
     </a>
+
+    <!-- GALLERY MODAL -->
+    <div class="gallery-modal" id="galleryModal" onclick="closeGalleryModal(event)">
+        <div class="gallery-modal-close" onclick="closeGalleryModal(event)">&times;</div>
+        <img id="galleryModalImg" src="" alt="Enlarged Prenup Photo">
+    </div>
 
 <script>
 // ⚠️ PASTE YOUR BRAND NEW DEPLOYMENT URL HERE:
@@ -1911,6 +2066,27 @@
             }, 800);
         }
     });
+
+    // --- GALLERY MODAL LOGIC ---
+    function openGalleryModal(item) {
+        const img = item.querySelector('img');
+        if (img) {
+            const modal = document.getElementById('galleryModal');
+            const modalImg = document.getElementById('galleryModalImg');
+            modalImg.src = img.src;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+    }
+
+    function closeGalleryModal(event) {
+        // Only close if clicking the background or the close button, not the image itself
+        if (event && event.target.id === 'galleryModalImg') return;
+        
+        const modal = document.getElementById('galleryModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 
     // Initial Load
     loadInitialData();
