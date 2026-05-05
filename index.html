@@ -673,12 +673,33 @@
             margin-bottom: 25px;
         }
 
-        #message-list { display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 20px; }
+        #message-list { 
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 10px 5px 30px 5px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        #message-list::-webkit-scrollbar {
+            display: none;
+        }
         .message-card { 
+            flex: 0 0 85%;
+            scroll-snap-align: center;
             background: white; 
             padding: 25px; 
             width: 100%; 
             max-width: 500px; 
+            height: 260px;
+            display: flex;
+            flex-direction: column;
             border-radius: 12px;
             border-top: 4px solid var(--gold); 
             text-align: left; 
@@ -702,13 +723,35 @@
             font-family: 'Playfair Display', serif;
             font-size: 1.2rem;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
         .message-card p {
             color: #555;
             line-height: 1.6;
             font-style: italic;
             margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: thin;
+        }
+        .message-card p::-webkit-scrollbar {
+            width: 4px;
+        }
+        .message-card p::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.02);
+        }
+        .message-card p::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 4px;
+        }
+        .message-card span.status {
+            display: block; 
+            margin-top: 15px; 
+            font-size: 0.85rem; 
+            color: #888; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
         }
 
         /* SCROLL ANIMATIONS */
@@ -1086,13 +1129,24 @@
             text-align: center;
         }
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
             max-width: 1100px;
             margin: 40px auto 0;
+            padding: 10px 5px 30px 5px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        .gallery-grid::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Opera */
         }
         .gallery-item {
+            flex: 0 0 85%;
+            max-width: 320px;
+            scroll-snap-align: center;
             position: relative;
             overflow: hidden;
             border-radius: 4px;
@@ -1145,6 +1199,47 @@
         }
         .gallery-modal-close:hover {
             color: var(--gold);
+        }
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .gallery-dot:hover {
+            background-color: var(--burgundy-soft);
+        }
+        .gallery-dot.active {
+            background-color: var(--burgundy);
+            transform: scale(1.4);
+        }
+        .gallery-dot.number-dot {
+            width: auto;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: transparent;
+            color: #888;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 4px;
+        }
+        .gallery-dot.number-dot:hover {
+            color: var(--burgundy);
+            background-color: transparent;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -1319,6 +1414,9 @@
                 <img src="https://dardoblack02.github.io/ed-and-clara/6.jpg?auto=format&fit=crop&q=80&w=800" alt="Prenup Photo 6" loading="lazy">
             </div>
         </div>
+        
+        <!-- DOT BULLETS -->
+        <div class="gallery-dots" id="galleryDots"></div>
     </section>
 
     <!-- NEW ENTOURAGE SECTION -->
@@ -1488,6 +1586,7 @@
         <!-- NEW ATTENDANCE COUNTER -->
         <p class="attendance-counter" id="attendanceCounter">0 out of 137 will attend our wedding!</p>
         <div id="message-list"></div>
+        <div class="gallery-dots" id="messageDots"></div>
     </section>
 
     <!-- NEW FAQ SECTION -->
@@ -1737,7 +1836,7 @@
             const giftText = data.gift !== "No gift selected" ? ` <br><small style="color: var(--gold); font-style: normal; font-size: 0.85rem; margin-top: 5px; display: inline-block;">Gift: ${data.gift}</small>` : "";
             card.innerHTML = `<strong>${data.name}</strong>
                               <p>"${data.msg}"</p> 
-                              <span style="display: block; margin-top: 15px; font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px;">Will ${data.status}${giftText}</span>`;
+                              <span class="status">Will ${data.status}${giftText}</span>`;
             list.appendChild(card);
             if (typeof observer !== 'undefined') observer.observe(card);
         });
@@ -1747,6 +1846,9 @@
         if (counterEl) {
             counterEl.innerText = `${attendingCount} out of 137 will attend our wedding!`;
         }
+        
+        // Setup horizontal scroll dots for messages
+        initMessageDots();
     }
 
     // --- RSVP DEADLINE CHECK ---
@@ -2068,6 +2170,167 @@
     });
 
     // --- GALLERY MODAL LOGIC ---
+    function initGalleryDots() {
+        const grid = document.querySelector('.gallery-grid');
+        const items = grid.querySelectorAll('.gallery-item');
+        const dotsContainer = document.getElementById('galleryDots');
+        
+        if (!grid || !dotsContainer || items.length === 0) return;
+        
+        // Create dots
+        items.forEach((item, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'gallery-dot';
+            if (index === 0) dot.classList.add('active');
+            
+            // Click dot to scroll to item
+            dot.addEventListener('click', () => {
+                // Determine item width and max scroll
+                const maxScroll = grid.scrollWidth - grid.clientWidth;
+                // Find percentage of this dot
+                const percentage = index / (items.length - 1);
+                
+                grid.scrollTo({
+                    left: percentage * maxScroll,
+                    behavior: 'smooth'
+                });
+            });
+            
+            dotsContainer.appendChild(dot);
+        });
+        
+        const dots = dotsContainer.querySelectorAll('.gallery-dot');
+        
+        // Update dots mapping strictly to scroll percentage
+        const updateActiveDot = () => {
+            const maxScroll = grid.scrollWidth - grid.clientWidth;
+            
+            // If the screen is big enough that no scrolling is needed, hide the dots completely
+            if (maxScroll <= 10) {
+                dotsContainer.style.display = 'none';
+            } else {
+                dotsContainer.style.display = 'flex';
+                // Calculate how far we've scrolled from 0 to 1
+                const scrollPercentage = grid.scrollLeft / maxScroll;
+                // Map the percentage directly to our dot indexes
+                const activeIndex = Math.round(scrollPercentage * (items.length - 1));
+                
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === activeIndex);
+                });
+            }
+        };
+
+        // Listen for scroll events to update dots smoothly
+        grid.addEventListener('scroll', updateActiveDot);
+        // Also fire on resize in case the layout changes (e.g., rotating a device)
+        window.addEventListener('resize', updateActiveDot);
+        
+        // Setup initial state (short delay to ensure layout is computed)
+        setTimeout(updateActiveDot, 100);
+    }
+
+    function initMessageDots() {
+        const grid = document.getElementById('message-list');
+        const items = grid.querySelectorAll('.message-card');
+        const dotsContainer = document.getElementById('messageDots');
+        
+        if (!grid || !dotsContainer || items.length === 0) return;
+        
+        const scrollGrid = (index) => {
+            const maxScroll = grid.scrollWidth - grid.clientWidth;
+            const percentage = items.length > 1 ? index / (items.length - 1) : 0;
+            grid.scrollTo({
+                left: percentage * maxScroll,
+                behavior: 'smooth'
+            });
+        };
+        
+        const updateDOM = (activeIndex) => {
+            const total = items.length;
+            dotsContainer.innerHTML = '';
+            
+            const maxVisible = 6;
+            let start = 0;
+            let end = total - 1;
+            
+            if (total > maxVisible) {
+                if (activeIndex < 3) {
+                    start = 0;
+                    end = 4;
+                } else if (activeIndex > total - 4) {
+                    start = total - 5;
+                    end = total - 1;
+                } else {
+                    start = activeIndex - 1;
+                    end = activeIndex + 2;
+                }
+            }
+            
+            if (start > 0) {
+                const leftDot = document.createElement('div');
+                leftDot.className = 'gallery-dot number-dot';
+                leftDot.innerText = `+${start}`; 
+                leftDot.addEventListener('click', () => {
+                    scrollGrid(start - 1);
+                });
+                dotsContainer.appendChild(leftDot);
+            }
+            
+            for (let i = start; i <= end; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'gallery-dot';
+                if (i === activeIndex) dot.classList.add('active');
+                
+                dot.addEventListener('click', () => {
+                    scrollGrid(i);
+                });
+                dotsContainer.appendChild(dot);
+            }
+            
+            if (end < total - 1) {
+                const rightCount = total - 1 - end;
+                const rightDot = document.createElement('div');
+                rightDot.className = 'gallery-dot number-dot';
+                rightDot.innerText = `+${rightCount}`;
+                rightDot.addEventListener('click', () => {
+                    scrollGrid(end + 1);
+                });
+                dotsContainer.appendChild(rightDot);
+            }
+        };
+
+        const updateActiveDot = () => {
+            const maxScroll = grid.scrollWidth - grid.clientWidth;
+            
+            if (maxScroll <= 10) {
+                dotsContainer.style.display = 'none';
+            } else {
+                dotsContainer.style.display = 'flex';
+                // Avoid division by zero
+                const scrollPercentage = maxScroll > 0 ? grid.scrollLeft / maxScroll : 0;
+                const activeIndex = Math.round(scrollPercentage * (items.length - 1));
+                
+                if (grid._lastActiveIndex !== activeIndex) {
+                    grid._lastActiveIndex = activeIndex;
+                    updateDOM(activeIndex);
+                }
+            }
+        };
+
+        if (grid._updateDotsFn) {
+            grid.removeEventListener('scroll', grid._updateDotsFn);
+            window.removeEventListener('resize', grid._updateDotsFn);
+        }
+        grid._updateDotsFn = updateActiveDot;
+        grid._lastActiveIndex = -1; // Reset tracking to force render
+        
+        grid.addEventListener('scroll', updateActiveDot);
+        window.addEventListener('resize', updateActiveDot);
+        
+        setTimeout(updateActiveDot, 100);
+    }
+
     function openGalleryModal(item) {
         const img = item.querySelector('img');
         if (img) {
@@ -2089,6 +2352,7 @@
     }
 
     // Initial Load
+    initGalleryDots();
     loadInitialData();
 </script>
 </body>
